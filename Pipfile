@@ -1,0 +1,27 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[dev-packages]
+
+[packages]
+flask = "*"
+mongoengine = "*"
+pyjwt = "*"
+flask-mongoengine = "*"
+python-slugify = "*"
+marshmallow = "*"
+flask-restful = "*"
+celery = "*"
+cryptography = "*"
+flask-script = "*"
+ipython = "*"
+flask-cors = "*"
+flask-redis = "*"
+pyyaml = "*"
+uwsgi = "*"
+gunicorn = "*"
+
+[requires]
+python_version = "3.6"
