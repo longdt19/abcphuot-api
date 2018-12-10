@@ -10,10 +10,8 @@ class UserBL(BaseLogic):
         user = User.objects(email=email).first()
         if not user:
             raise InvalidCredentials
-
         if password != decrypt(user.password):
             raise InvalidCredentials
-
         access_token = make_jwt_token(id=str(user.id))
         return dict(access_token=access_token, auth_user=user.output())
 

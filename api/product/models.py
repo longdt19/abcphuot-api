@@ -1,5 +1,25 @@
 from api.common.base_models import BaseDocument, db, STRING_LENGTH
 
+
+class WifiProduct(BaseDocument):
+    country = db.StringField(max_length=STRING_LENGTH['LONG'], required=True)
+    internet_name = db.StringField(max_length=STRING_LENGTH['LONG'], required=True)
+    connection = db.IntField(default=1)
+    speed_download = db.StringField(max_length=STRING_LENGTH['LONG'], required=True)
+    speed_upload = db.StringField(max_length=STRING_LENGTH['LONG'], required=True)
+    information = db.StringField(max_length=STRING_LENGTH['LONG'], required=True)
+    prepayment = db.IntField()
+    price_day = db.IntField()
+    image = db.ListField(db.ObjectIdField(), default=[])
+
+
+class SimProduct(BaseDocument):
+    owned = db.StringField(max_length=STRING_LENGTH['LONG'], required=True)
+    day_used = db.IntField(default=0)
+    price = db.IntField(default=0)
+    image = db.ListField(db.ObjectIdField(), default=[])
+
+
 class Category(BaseDocument):
     name = db.StringField(max_length=STRING_LENGTH['LONG'], required=True)
     parent_id = db.ObjectIdField()

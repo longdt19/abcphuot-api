@@ -1,8 +1,50 @@
 from api.common.base_resources import BaseResource
 
 from .forms import *
-from .business_logics import product_bl, category_bl
+from .business_logics import product_bl, category_bl, sim_bl, wifi_bl
 
+
+class WifiProductResource(BaseResource):
+    GET_INPUT_SCHEMA = ListWifiProductForm()
+    POST_INPUT_SCHEMA = CreateWifiForm()
+    PATCH_INPUT_SCHEMA = UpdateWifiForm()
+
+    def get(self):
+        params = self.parse_request_params()
+        return wifi_bl.list(**params)
+    
+    def post(self):
+        params = self.parse_request_params()
+        return wifi_bl.create(**params)
+
+    def patch(self):
+        params = self.parse_request_params()
+        return wifi_bl.update(**params)
+    
+    def delete(self):
+        params = self.parse_request_params()
+        return wifi_bl.delete(**params)
+
+class SimProductResource(BaseResource):
+    GET_INPUT_SCHEMA = ListSimProductForm()
+    POST_INPUT_SCHEMA = CreateSimForm()
+    PATCH_INPUT_SCHEMA = UpdateSimForm()
+    
+    def get(self):
+        params = self.parse_request_params()
+        return sim_bl.list(**params)
+    
+    def post(self):
+        params = self.parse_request_params()
+        return sim_bl.create(**params)
+    
+    def patch(self):
+        params = self.parse_request_params()
+        return sim_bl.update(**params)
+    
+    def delete(self):
+        params = self.parse_request_params()
+        return sim_bl.delete(**params)
 
 class ProductResource(BaseResource):
     POST_INPUT_SCHEMA = CreateProductForm()
@@ -61,6 +103,12 @@ class CategoryResource(BaseResource):
 
 
 RESOURCES = {
+    '/sim-product': {
+        'resource': SimProductResource
+    },
+    '/wifi-product': {
+        'resource': WifiProductResource
+    },
     '/product': {
         'resource': ProductResource,
         'required_auth_methods': ['POST', 'PATCH']

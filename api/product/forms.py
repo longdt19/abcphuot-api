@@ -5,6 +5,54 @@ from .models import Category
 from .constants import PRODUCT_STATUSES, PRODUCT_SIZES
 
 
+class UpdateWifiForm(BaseForm):
+    country = fields.String(validate=STRING_LENGTH_VALIDATORS['LONG'])
+    internet_name = fields.String(validate=STRING_LENGTH_VALIDATORS['LONG'])
+    connection = fields.Integer(required=True)
+    speed_download = fields.String(validate=STRING_LENGTH_VALIDATORS['LONG'])
+    speed_upload = fields.String(validate=STRING_LENGTH_VALIDATORS['LONG'])
+    information = fields.String(validate=STRING_LENGTH_VALIDATORS['LONG'])
+    prepayment =fields.Integer(required=True)
+    price_day = fields.Integer(required=True)
+    id = IdField(required=True)
+
+
+class CreateWifiForm(BaseForm):
+    country = fields.String(validate=STRING_LENGTH_VALIDATORS['LONG'])
+    internet_name = fields.String(validate=STRING_LENGTH_VALIDATORS['LONG'])
+    connection = fields.Integer(required=True)
+    speed_download = fields.String(validate=STRING_LENGTH_VALIDATORS['LONG'])
+    speed_upload = fields.String(validate=STRING_LENGTH_VALIDATORS['LONG'])
+    information = fields.String(validate=STRING_LENGTH_VALIDATORS['LONG'])
+    prepayment =fields.Integer(required=True)
+    price_day = fields.Integer(required=True)
+
+
+class ListWifiProductForm(BaseListForm):
+    search_text = fields.String(validate=STRING_LENGTH_VALIDATORS['LONG'])
+
+
+class DeleteSimForm(BaseForm):
+    id = IdField(required=True)
+
+
+class UpdateSimForm(BaseForm):
+    id = IdField()
+    owned = fields.String(validate=STRING_LENGTH_VALIDATORS['LONG'])
+    day_used = fields.Integer(required=True)
+    price = fields.Integer(required=True)
+
+
+class CreateSimForm(BaseForm):
+    owned = fields.String(validate=STRING_LENGTH_VALIDATORS['LONG'])
+    day_used = fields.Integer(required=True)
+    price = fields.Integer(required=True)
+
+
+class ListSimProductForm(BaseListForm):
+    search_text = fields.String(validate=STRING_LENGTH_VALIDATORS['LONG'])
+
+
 class CategoryField(IdField):
     def _validate(self, value):
         super()._validate(value=value)

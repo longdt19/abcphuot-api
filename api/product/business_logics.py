@@ -6,9 +6,127 @@ from api.common.base_errors import InvalidRequestParams, PermissionError
 from api.storage.models import Image
 from api.promotion.models import PromotionPackage
 
-from .models import Product, Category
+from .models import Product, Category, SimProduct, WifiProduct
 from .errors import *
 
+class WifiProductBL(BaseLogic):
+
+    def list(self, page, per_page, order, search_text=None):
+        matches = WifiProduct.objects()
+        print ('matches', matches)
+
+        if search_text:
+            search_text_query = Q(slug__contains=slugify(search_text)) | \
+                                Q(code__contains=search_text)
+            matches = matches.filter(search_text_query)
+        matches = matches.order_by(order)
+        total = matches.count(True)
+
+        result = []
+
+        for product in matches.paginate(page=page, per_page=per_page).items:
+            product_output = product.output()
+            for index, image_id in enumerate(product.image):
+                image = Image.objects(id=image_id).first()
+                product_output['images'][index] = image.url
+            result.append(product_output)
+
+        return dict(total=total, result=result)
+
+    def create(self, country, internet_name, connection, speed_download, speed_upload, information, prepayment, price_day):
+        product = WifiProduct(country=country,
+                              internet_name=internet_name,
+                              connection=connection,
+                              speed_download=speed_download,
+                              speed_upload=speed_upload,
+                              information=information,
+                              prepayment=prepayment,
+                              price_day=price_day)
+        product.create()
+        product.save()
+        return product.output()
+    
+    def update(self, id, country, internet_name, connection, speed_download, speed_upload, information, prepayment, price_day):
+        product = self._get_record_by_id(model=WifiProduct, id=id)
+        update_params = dict()
+        if country:
+            update_params['country'] = country
+        if internet_name:
+            update_params['internet_name'] = internet_name
+        if connection:
+            update_params['connection'] = connection
+        if speed_download:
+            update_params['speed_download'] = speed_download
+        if speed_upload:
+            update_params['speed_upload'] = speed_upload
+        if information:
+            update_params['information'] = information
+        if prepayment:
+            update_params['prepayment'] = prepayment
+        if price_day:
+            update_params['price_day'] = price_day
+
+        if update_params:
+            product.patch(update_params=update_params)
+
+        return (product.output())
+    
+    def delete(self, id):
+        product = self._get_record_by_id(model=WifiProduct, id=id)
+        product.delete()
+        product.save()
+        return dict(success=True)
+
+class SimProductBL(BaseLogic):
+
+    def list(self, page, per_page, order, search_text=None):
+        matches = SimProduct.objects()
+
+        if search_text:
+            search_text_query = Q(slug__contains=slugify(search_text)) | \
+                                Q(code__contains=search_text)
+            matches = matches.filter(search_text_query)
+        matches = matches.order_by(order)
+        total = matches.count(True)
+
+        result = []
+
+        for product in matches.paginate(page=page, per_page=per_page).items:
+            product_output = product.output()
+            for index, image_id in enumerate(product.image):
+                image = Image.objects(id=image_id).first()
+                product_output['images'][index] = image.url
+            result.append(product_output)
+
+        return dict(total=total, result=result)
+    
+    def create(self, owned, day_used, price):
+        product = SimProduct(owned=owned, day_used=day_used, price=price)
+        product.create()
+        product.save()
+        return product.output()
+    
+    def update(self, id, owned, day_used, price):
+        product = self._get_record_by_id(model=SimProduct, id=id)
+
+        update_params = dict()
+        if owned:
+            update_params['owned'] = owned
+        if day_used:
+            update_params['day_used'] = day_used
+        if price:
+            update_params['price'] = price
+        
+        if update_params:
+            product.patch(update_params=update_params)
+        
+        return (product.output())
+    
+    def delete(self, id):
+        product = self._get_record_by_id(model=SimProduct, id=id)
+        product.delete()
+        product.save()
+        return dict(success=True)
 
 class ProductBL(BaseLogic):
 
@@ -244,3 +362,5 @@ class CategoryBL(BaseLogic):
 
 product_bl = ProductBL()
 category_bl = CategoryBL()
+sim_bl = SimProductBL()
+wifi_bl = WifiProductBL()

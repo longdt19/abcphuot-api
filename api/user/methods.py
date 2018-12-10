@@ -25,7 +25,7 @@ def decrypt(token):
 
 def make_jwt_token(*args, **kwargs):
     now = datetime.now()
-    expire = now + timedelta(seconds=JWT_TOKEN_EXPIRE)
+    expire = now + timedelta(seconds=7200)
     payload = OrderedDict(
         exp=expire,
         **kwargs
