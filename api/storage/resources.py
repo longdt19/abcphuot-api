@@ -41,7 +41,6 @@ class DownloadResource(BaseResource):
 RESOURCES = {
     '/image': {
         'resource': ImageResource,
-        'required_auth_methods': ['POST', 'DELETE']
     },
     '/download': {
         'resource': DownloadResource

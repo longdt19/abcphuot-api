@@ -10,20 +10,23 @@ class WifiProduct(BaseDocument):
     information = db.StringField(max_length=STRING_LENGTH['LONG'], required=True)
     prepayment = db.IntField()
     price_day = db.IntField()
-    image = db.ListField(db.ObjectIdField(), default=[])
+    image = db.ObjectIdField()
+    continent = db.StringField(max_length=STRING_LENGTH['LONG'], required=True)
 
 
 class SimProduct(BaseDocument):
     owned = db.StringField(max_length=STRING_LENGTH['LONG'], required=True)
     day_used = db.IntField(default=0)
     price = db.IntField(default=0)
-    image = db.ListField(db.ObjectIdField(), default=[])
+    image = db.ObjectIdField()
+    country = db.StringField(max_length=STRING_LENGTH['LONG'])
 
 
 class Category(BaseDocument):
     name = db.StringField(max_length=STRING_LENGTH['LONG'], required=True)
     parent_id = db.ObjectIdField()
     images = db.ListField(db.ObjectIdField(), default=[])
+    country = db.StringField(max_length=STRING_LENGTH['LONG'], required=True)
 
 
 class Product(BaseDocument):

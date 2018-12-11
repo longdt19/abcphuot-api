@@ -38,11 +38,11 @@ class StorageBL(BaseLogic):
 
 
 class ImageBL(StorageBL):
-    def create(self, object_id, object_type, file):
+    def create(self, file):
         if not self._is_file_ext_valid(filename=file.filename, valid_exts=VALID_IMAGE_EXTS):
             raise InvalidFileExt('Invalid image ext!')
 
-        obj = self._get_object(object_id=object_id, object_type=object_type, type_map=OBJECT_TYPE_MAP)
+        # obj = self._get_object(object_id=object_id, object_type=object_type, type_map=OBJECT_TYPE_MAP)
 
         image = Image()
 
@@ -53,14 +53,14 @@ class ImageBL(StorageBL):
         image.name = file.name
         image.path = path
         image.size = size
-        image.object_type = object_type
-        image.content_type = file.content_type
-        image.object_id = object_id
-        image.created_by = g.user.id
+        # image.object_type = object_type
+        # image.content_type = file.content_type
+        # image.object_id = object_id
+        # image.created_by = g.user.id
 
         image.create()
 
-        obj.patch(update_params=dict(push__images=image.id))
+        # obj.patch(update_params=dict(push__images=image.id))
         return image.output()
 
     def delete(self, id):

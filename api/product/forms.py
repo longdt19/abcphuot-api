@@ -15,6 +15,7 @@ class UpdateWifiForm(BaseForm):
     prepayment =fields.Integer(required=True)
     price_day = fields.Integer(required=True)
     id = IdField(required=True)
+    continent = fields.String(validate=STRING_LENGTH_VALIDATORS['LONG'])
 
 
 class CreateWifiForm(BaseForm):
@@ -26,6 +27,8 @@ class CreateWifiForm(BaseForm):
     information = fields.String(validate=STRING_LENGTH_VALIDATORS['LONG'])
     prepayment =fields.Integer(required=True)
     price_day = fields.Integer(required=True)
+    image_id = IdField()
+    continent = fields.String(validate=STRING_LENGTH_VALIDATORS['LONG'])
 
 
 class ListWifiProductForm(BaseListForm):
@@ -41,12 +44,15 @@ class UpdateSimForm(BaseForm):
     owned = fields.String(validate=STRING_LENGTH_VALIDATORS['LONG'])
     day_used = fields.Integer(required=True)
     price = fields.Integer(required=True)
+    country = fields.String(validate=STRING_LENGTH_VALIDATORS['LONG'])
 
 
 class CreateSimForm(BaseForm):
     owned = fields.String(validate=STRING_LENGTH_VALIDATORS['LONG'])
     day_used = fields.Integer(required=True)
     price = fields.Integer(required=True)
+    image_id = IdField()
+    country = fields.String(validate=STRING_LENGTH_VALIDATORS['LONG'])
 
 
 class ListSimProductForm(BaseListForm):

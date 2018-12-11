@@ -26,14 +26,19 @@ class WifiProductBL(BaseLogic):
 
         for product in matches.paginate(page=page, per_page=per_page).items:
             product_output = product.output()
-            for index, image_id in enumerate(product.image):
+            image_id = product.image
+            # for index, image_id in enumerate(product.image):
+            if image_id:
                 image = Image.objects(id=image_id).first()
-                product_output['images'][index] = image.url
+                print ('image', image.url)
+                print ('path', image.path)
+            product_output['image'] = image.url
             result.append(product_output)
 
         return dict(total=total, result=result)
 
-    def create(self, country, internet_name, connection, speed_download, speed_upload, information, prepayment, price_day):
+    def create(self, country, internet_name, connection, speed_download,
+               speed_upload, information, prepayment, price_day, image_id, continent):
         product = WifiProduct(country=country,
                               internet_name=internet_name,
                               connection=connection,
@@ -41,12 +46,15 @@ class WifiProductBL(BaseLogic):
                               speed_upload=speed_upload,
                               information=information,
                               prepayment=prepayment,
-                              price_day=price_day)
+                              price_day=price_day,
+                              image=image_id,
+                              continent=continent)
         product.create()
         product.save()
         return product.output()
     
-    def update(self, id, country, internet_name, connection, speed_download, speed_upload, information, prepayment, price_day):
+    def update(self, id, country, internet_name, connection, speed_download,
+               speed_upload, information, prepayment, price_day, continent):
         product = self._get_record_by_id(model=WifiProduct, id=id)
         update_params = dict()
         if country:
@@ -65,6 +73,8 @@ class WifiProductBL(BaseLogic):
             update_params['prepayment'] = prepayment
         if price_day:
             update_params['price_day'] = price_day
+        if continent:
+            update_params['continent'] = continent
 
         if update_params:
             product.patch(update_params=update_params)
@@ -93,20 +103,28 @@ class SimProductBL(BaseLogic):
 
         for product in matches.paginate(page=page, per_page=per_page).items:
             product_output = product.output()
-            for index, image_id in enumerate(product.image):
+            image_id = product.image
+            # for index, image_id in enumerate(product.image):
+            if image_id:
                 image = Image.objects(id=image_id).first()
-                product_output['images'][index] = image.url
+                print ('image', image.url)
+                print ('path', image.path)
+            product_output['image'] = image.url
             result.append(product_output)
 
         return dict(total=total, result=result)
     
-    def create(self, owned, day_used, price):
-        product = SimProduct(owned=owned, day_used=day_used, price=price)
+    def create(self, owned, day_used, price, image_id, country):
+        product = SimProduct(owned=owned,
+                             day_used=day_used,
+                             price=price,
+                             image=image_id,
+                             country=country)
         product.create()
         product.save()
         return product.output()
     
-    def update(self, id, owned, day_used, price):
+    def update(self, id, owned, day_used, price, country):
         product = self._get_record_by_id(model=SimProduct, id=id)
 
         update_params = dict()
@@ -116,7 +134,9 @@ class SimProductBL(BaseLogic):
             update_params['day_used'] = day_used
         if price:
             update_params['price'] = price
-        
+        if country:
+            update_params['country'] = country
+
         if update_params:
             product.patch(update_params=update_params)
         
