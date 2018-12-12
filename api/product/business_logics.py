@@ -51,6 +51,14 @@ class WifiProductBL(BaseLogic):
                               continent=continent)
         product.create()
         product.save()
+
+        product_output = product.output()
+        image_id = product.image
+        if image_id:
+            image = Image.objects(id=image_id).first()
+            product_output['image'] = image.url
+        return product_output
+
         return product.output()
     
     def update(self, id, country, internet_name, connection, speed_download,
@@ -107,9 +115,7 @@ class SimProductBL(BaseLogic):
             # for index, image_id in enumerate(product.image):
             if image_id:
                 image = Image.objects(id=image_id).first()
-                print ('image', image.url)
-                print ('path', image.path)
-            product_output['image'] = image.url
+                product_output['image'] = image.url
             result.append(product_output)
 
         return dict(total=total, result=result)
@@ -122,7 +128,13 @@ class SimProductBL(BaseLogic):
                              country=country)
         product.create()
         product.save()
-        return product.output()
+
+        product_output = product.output()
+        image_id = product.image
+        if image_id:
+            image = Image.objects(id=image_id).first()
+            product_output['image'] = image.url
+        return product_output
     
     def update(self, id, owned, day_used, price, country):
         product = self._get_record_by_id(model=SimProduct, id=id)
