@@ -19,5 +19,5 @@ STRING_LENGTH = {
     'LONG': 500,
     'EX_LONG': 1000,
     'LARGE': 3000,
-    'EX_LARGE': 10000
+    'EX_LARGE': 10000000
 }

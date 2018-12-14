@@ -1,0 +1,8 @@
+DEBUG: true
+APP_NAME: 'longdt-shop'
+SECRET_KEY: 'tgh7pG3nrBUKtAuTFyjzYDykw_MABpHX4gRpTORREJg='
+DOMAIN: 'http://127.0.0.1:5000'
+SOCKET_MSG_QUEUE: 'redis://127.0.0.1:6379/0'
+CELERY_BROKER: 'redis://127.0.0.1:6379/1'
+CELERY_BACKEND: 'redis://127.0.0.1:6379/2'
+MONGODB_HOST: 'mongodb://127.0.0.1:27017/hiepcao'

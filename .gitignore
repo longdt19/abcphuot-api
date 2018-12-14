@@ -52,5 +52,4 @@ ENV/
 tmp
 static/upload
 tests/
-app.yaml
 logs

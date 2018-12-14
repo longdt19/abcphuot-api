@@ -1,8 +1,13 @@
 from api.common.base_resources import BaseResource
 
-from .business_logics import banner_bl, post_bl
+from .business_logics import banner_bl, post_bl, postblog_bl
 from .forms import *
 
+
+class BlogResource(BaseResource):
+    POST_INPUT_SCHEMA = CreateBannerForm()
+    PATCH_INPUT_SCHEMA = UpdateBannerForm()
+    GET_INPUT_SCHEMA = GetBannerForm()
 
 class BannerResource(BaseResource):
     POST_INPUT_SCHEMA = CreateBannerForm()
@@ -74,7 +79,6 @@ RESOURCES = {
     },
     '/post': {
         'resource': PostResource,
-        'required_auth_methods': ['POST', 'PATCH', 'DELETE']
     },
     '/list-posts': {
         'resource': ListPostResource

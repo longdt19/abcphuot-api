@@ -15,6 +15,82 @@ OBJECT_TYPE_MAP = {
 }
 
 
+class PostBlogBL(BaseLogic):
+    def create(self, title, category_id, content=None):
+        post = Post()
+        post.name = name
+        post.category_id = category_id
+        post.content = content
+        post.create()
+        post.save()
+        return post.output()
+
+    def update(self, id, title, category_id, content=None):
+        post = self._get_record_by_id(model=Post, id=id)
+        update_params = dict()
+        if content is not None:
+            update_params['content'] = content
+
+        if title:
+            update_params['title'] = title
+
+        if category_id:
+            update_params['category_id'] = category_id
+
+        if update_params:
+            update_params['updated_by'] = g.user.id
+            post.patch(update_params=update_params)
+        return dict(success=True)
+
+        def list(self, page, per_page, order, search_text=None, categories=None):
+            params = dict()
+            if categories:
+                params['category_id__in'] = categories
+
+            if search_text:
+                params['slug__contains'] = slugify(search_text)
+
+            matches = Post.objects(**params).order_by(order)
+
+            total = matches.count(True)
+            result = []
+            for post in matches.paginate(page=page, per_page=per_page).items:
+                post_output = post.output()
+                for index, image_id in enumerate(post.images):
+                    image = Image.objects(id=image_id).first()
+                    post_output['images'][index] = image.url
+                result.append(post_output)
+            return dict(total=total, result=result)
+
+        def get_one(self, id=None, slug=None):
+            if not id and not slug:
+                raise InvalidRequestParams('Must pass atleast id or slug!')
+
+            if id:
+                post = self._get_record_by_id(model=Post, id=id)
+
+            else:
+                post = Post.objects(slug=slug).first()
+
+            if not post:
+                return dict()
+
+            result = post.output()
+            for index, image_id in enumerate(post.images):
+                image = Image.objects(id=image_id).first()
+                result['images'][index] = image.url
+
+            return result
+
+        def delete(self, id):
+            post = self._get_record_by_id(id=id, model=Post)
+            images = Image.objects(object_id=post.id, object_type='post')
+            for image in images:
+                uploader.remove(image.path)
+            images.delete()
+            post.delete()
+            return dict(success=True)
+
 class BannerBL(BaseLogic):
     def _is_name_duplicate(self, name, id=None):
         params = dict(slug=slugify(name))
@@ -101,7 +177,6 @@ class PostBL(BaseLogic):
         post = Post()
         post.name = name
         post.category_id = category_id
-        post.created_by = g.user.id
         post.create()
         return post.output()
 
@@ -118,7 +193,6 @@ class PostBL(BaseLogic):
             update_params['category_id'] = category_id
 
         if update_params:
-            update_params['updated_by'] = g.user.id
             post.patch(update_params=update_params)
         return dict(success=True)
 
@@ -164,13 +238,10 @@ class PostBL(BaseLogic):
 
     def delete(self, id):
         post = self._get_record_by_id(id=id, model=Post)
-        images = Image.objects(object_id=post.id, object_type='post')
-        for image in images:
-            uploader.remove(image.path)
-        images.delete()
         post.delete()
         return dict(success=True)
 
 
 banner_bl = BannerBL()
 post_bl = PostBL()
+postblog_bl = PostBlogBL()

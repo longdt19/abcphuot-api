@@ -3,6 +3,28 @@ from api.common.base_forms import ValidationError, BaseCreateForm, BaseListForm,
 
 from .constants import POST_CATEGORIES
 
+# class CreateBlogForm(BaseCreateForm):
+#     title = fields.String(required=True, validate=STRING_LENGTH_VALIDATORS['LONG'])
+#     category_id = PostCategoryField(required=True)
+#     content = fields.String(required=True, validate=STRING_LENGTH_VALIDATORS['EX_LONG'])
+#
+# class UpdateBlogForm(BaseUpdateForm):
+#     title = fields.String(validate=STRING_LENGTH_VALIDATORS['LONG'])
+#     content = fields.String(validate=STRING_LENGTH_VALIDATORS['EX_LARGE'])
+#     category_id = PostCategoryField()
+
+
+
+
+
+
+
+
+class PostCategoryField(fields.Field):
+    def _validate(self, value):
+        if value not in list(map(lambda item: item['id'], POST_BLOG_CAT)):
+            raise ValidationError('Invalid category_id!')
+
 
 class PostCategoryField(fields.Field):
     def _validate(self, value):

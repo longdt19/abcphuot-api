@@ -1,0 +1,16 @@
+flask
+mongoengine
+pyjwt
+flask-mongoengine
+python-slugify
+marshmallow
+flask-restful
+celery
+cryptography
+flask-script
+ipython
+flask-cors
+flask-redis
+pyyaml
+uwsgi
+gunicorn
