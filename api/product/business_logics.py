@@ -11,9 +11,22 @@ from .errors import *
 
 class WifiProductBL(BaseLogic):
 
+    def get_one(self, product_id):
+        product = WifiProduct.objects(id=product_id).first()
+        if not product:
+            return dict(message=False)
+
+        product_output = product.output()
+        image_id = product.image
+        # for index, image_id in enumerate(product.image):
+        if image_id:
+            image = Image.objects(id=image_id).first()
+            product_output['image'] = image.url
+
+        return product_output
+
     def list(self, page, per_page, order, search_text=None):
         matches = WifiProduct.objects()
-        print ('matches', matches)
 
         if search_text:
             search_text_query = Q(slug__contains=slugify(search_text)) | \
@@ -30,8 +43,6 @@ class WifiProductBL(BaseLogic):
             # for index, image_id in enumerate(product.image):
             if image_id:
                 image = Image.objects(id=image_id).first()
-                print ('image', image.url)
-                print ('path', image.path)
             product_output['image'] = image.url
             result.append(product_output)
 
@@ -51,7 +62,6 @@ class WifiProductBL(BaseLogic):
                               continent=continent)
         product.create()
         product.save()
-
         product_output = product.output()
         image_id = product.image
         if image_id:
@@ -59,8 +69,6 @@ class WifiProductBL(BaseLogic):
             product_output['image'] = image.url
         return product_output
 
-        return product.output()
-    
     def update(self, id, country, internet_name, connection, speed_download,
                speed_upload, information, prepayment, price_day, continent):
         product = self._get_record_by_id(model=WifiProduct, id=id)
@@ -88,7 +96,7 @@ class WifiProductBL(BaseLogic):
             product.patch(update_params=update_params)
 
         return (product.output())
-    
+
     def delete(self, id):
         product = self._get_record_by_id(model=WifiProduct, id=id)
         product.delete()
@@ -96,6 +104,20 @@ class WifiProductBL(BaseLogic):
         return dict(success=True)
 
 class SimProductBL(BaseLogic):
+
+    def get_one(self, product_id):
+        product = SimProduct.objects(id=product_id).first()
+        if not product:
+            return dict(message=False)
+
+        product_output = product.output()
+        image_id = product.image
+        # for index, image_id in enumerate(product.image):
+        if image_id:
+            image = Image.objects(id=image_id).first()
+            product_output['image'] = image.url
+
+        return product_output
 
     def list(self, page, per_page, order, search_text=None):
         matches = SimProduct.objects()
@@ -119,7 +141,7 @@ class SimProductBL(BaseLogic):
             result.append(product_output)
 
         return dict(total=total, result=result)
-    
+
     def create(self, owned, day_used, price, image_id, country):
         product = SimProduct(owned=owned,
                              day_used=day_used,
@@ -135,7 +157,7 @@ class SimProductBL(BaseLogic):
             image = Image.objects(id=image_id).first()
             product_output['image'] = image.url
         return product_output
-    
+
     def update(self, id, owned, day_used, price, country):
         product = self._get_record_by_id(model=SimProduct, id=id)
 
@@ -151,9 +173,9 @@ class SimProductBL(BaseLogic):
 
         if update_params:
             product.patch(update_params=update_params)
-        
+
         return (product.output())
-    
+
     def delete(self, id):
         product = self._get_record_by_id(model=SimProduct, id=id)
         product.delete()

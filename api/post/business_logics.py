@@ -16,11 +16,12 @@ OBJECT_TYPE_MAP = {
 
 
 class PostBlogBL(BaseLogic):
-    def create(self, title, category_id, content=None):
+    def create(self, title, category_id, banner_id, content=None):
         post = Post()
         post.name = name
         post.category_id = category_id
         post.content = content
+        post.banner = banner_id
         post.create()
         post.save()
         return post.output()
@@ -173,12 +174,18 @@ class BannerBL(BaseLogic):
 
 
 class PostBL(BaseLogic):
-    def create(self, name, category_id):
+    def create(self, name, category_id, banner):
         post = Post()
         post.name = name
         post.category_id = category_id
+        post.banner = banner
         post.create()
-        return post.output()
+
+        post_output = post.output()
+        if banner:
+            image = Image.objects(id=banner).first()
+            post_output['image'] = image.url
+        return post_output
 
     def update(self, id, content=None, name=None, category_id=None):
         post = self._get_record_by_id(model=Post, id=id)
@@ -210,9 +217,12 @@ class PostBL(BaseLogic):
         result = []
         for post in matches.paginate(page=page, per_page=per_page).items:
             post_output = post.output()
-            for index, image_id in enumerate(post.images):
+
+            image_id = post.banner
+            if image_id:
                 image = Image.objects(id=image_id).first()
-                post_output['images'][index] = image.url
+                post_output['banner_url'] = image.url
+
             result.append(post_output)
         return dict(total=total, result=result)
 

@@ -12,7 +12,7 @@ class WifiProductResource(BaseResource):
     def get(self):
         params = self.parse_request_params()
         return wifi_bl.list(**params)
-    
+
     def post(self):
         params = self.parse_request_params()
         return wifi_bl.create(**params)
@@ -20,7 +20,7 @@ class WifiProductResource(BaseResource):
     def patch(self):
         params = self.parse_request_params()
         return wifi_bl.update(**params)
-    
+
     def delete(self):
         params = self.parse_request_params()
         return wifi_bl.delete(**params)
@@ -29,19 +29,19 @@ class SimProductResource(BaseResource):
     GET_INPUT_SCHEMA = ListSimProductForm()
     POST_INPUT_SCHEMA = CreateSimForm()
     PATCH_INPUT_SCHEMA = UpdateSimForm()
-    
+
     def get(self):
         params = self.parse_request_params()
         return sim_bl.list(**params)
-    
+
     def post(self):
         params = self.parse_request_params()
         return sim_bl.create(**params)
-    
+
     def patch(self):
         params = self.parse_request_params()
         return sim_bl.update(**params)
-    
+
     def delete(self):
         params = self.parse_request_params()
         return sim_bl.delete(**params)
@@ -102,7 +102,28 @@ class CategoryResource(BaseResource):
         return category_bl.delete(**params)
 
 
+class GetSimResource(BaseResource):
+    POST_INPUT_SCHEMA = GetSimForm()
+
+    def post(self):
+        params = self.parse_request_params()
+        return sim_bl.get_one(**params)
+
+class GetWifiResource(BaseResource):
+    POST_INPUT_SCHEMA = GetWifiForm()
+
+    def post(self):
+        params = self.parse_request_params()
+        return wifi_bl.get_one(**params)
+
+
 RESOURCES = {
+    '/get-sim': {
+        'resource': GetSimResource
+    },
+    '/get-wifi': {
+        'resource': GetWifiResource
+    },
     '/sim-product': {
         'resource': SimProductResource
     },

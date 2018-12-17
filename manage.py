@@ -5,6 +5,7 @@ from api.main import create_app
 from api.extensions import db
 from api.user import models as user_models
 from api.product import models as product_models
+from api.order import models as order_models
 from api.common import methods as common_methods
 
 from seed import Seed
@@ -26,6 +27,7 @@ def make_shell_context():
     return dict(app=current_app,
                 user_models=user_models,
                 product_models=product_models,
+                order_models=order_models,
                 common_methods=common_methods,
                 db=db, seed=Seed())
 

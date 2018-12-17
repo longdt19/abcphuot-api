@@ -5,6 +5,13 @@ from .models import Category
 from .constants import PRODUCT_STATUSES, PRODUCT_SIZES
 
 
+class GetSimForm(BaseForm):
+    product_id = IdField(required=True)
+
+class GetWifiForm(BaseForm):
+    product_id = IdField(required=True)
+
+
 class UpdateWifiForm(BaseForm):
     country = fields.String(validate=STRING_LENGTH_VALIDATORS['LONG'])
     internet_name = fields.String(validate=STRING_LENGTH_VALIDATORS['LONG'])

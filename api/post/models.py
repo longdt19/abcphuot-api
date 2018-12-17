@@ -22,3 +22,4 @@ class Post(BaseDocument):
     name = db.StringField(required=True, max_length=STRING_LENGTH['LONG'])
     content = db.StringField(max_length=STRING_LENGTH['EX_LARGE'])
     images = db.ListField(db.ObjectIdField(), default=[])
+    banner = db.ObjectIdField()

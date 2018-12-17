@@ -56,6 +56,7 @@ class ListBannerForm(BaseListForm):
 class CreatePostForm(BaseCreateForm):
     name = fields.String(required=True, validate=STRING_LENGTH_VALIDATORS['LONG'])
     category_id = PostCategoryField(required=True)
+    banner = IdField()
 
 
 class UpdatePostForm(BaseUpdateForm):
